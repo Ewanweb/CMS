@@ -1,0 +1,198 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model X.PagedList.IPagedList<CMS.Application.Products.Dtos.ProductDTO>
+
+
+@{
+    ViewData["Title"] = "Index";
+
+    var pageSizes = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "1", Text = "1", Selected = ViewBag.PageSize.ToString() == "" },
+        new SelectListItem { Value = "2", Text = "2", Selected = ViewBag.PageSize.ToString() == "2" },
+        new SelectListItem { Value = "5", Text = "5", Selected = ViewBag.PageSize.ToString() == "5" }
+    };
+}
+
+<h1>Index</h1>
+
+
+
+
+<div class="container mt-4 p-4 border rounded shadow-sm bg-light">
+    <h4 class="mb-3">انتخاب دسته‌بندی</h4>
+    <select id="SelectCategory" class="form-select">
+        <option value="0">همه دسته‌بندی‌ها</option>
+        @foreach (var category in ViewBag.Categories)
+        {
+            <option value="@category.Value">@category.Text</option>
+        }
+    </select>
+
+    <hr class="my-4">
+
+    <h4 class="mb-3">انتخاب تعداد صفحات در هر صفحه</h4>
+    <form method="get" class="d-flex align-items-center gap-3">
+        <label for="pageSize" class="form-label mb-0">تعداد صفحات:</label>
+        <select id="pageSize" name="pageSize" class="form-select w-auto">
+            @foreach (var size in pageSizes)
+            {
+                <option value="@size.Value" selected="@(size.Selected ? "selected" : null)">@size.Text</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-primary">اعمال</button>
+    </form>
+</div>
+
+
+<p>
+    <a asp-action="Create">افزودن فیلد جدید</a>
+</p>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Slug
+        </th>
+        <th>
+            Decription
+        </th>
+        <th>
+            Price
+        </th>
+        <th>
+            CategoryName
+        </th>
+        <th>
+            Image
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Slug
+            </td>
+            <td>
+                @Html.Raw(item.Decription)
+            </td>
+            <td>
+                @item.Price
+            </td>
+            <td>
+                @item.CategoryName
+            </td>
+            <td>
+                <img src="/Media/Products/@item.Image" width="100" alt="Alternate Text" />
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">ویرایش</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">جزئیات</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">حذف</a> |
+                <a asp-controller="ProductGallery" asp-action="Index" asp-route-id="@item.Id">گالری</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+<ul class="pagination">
+    <!-- دکمه اولین صفحه -->
+    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+        <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = ViewBag.PageSize })">اولین</a>
+    </li>
+
+    <!-- دکمه صفحات قبلی -->
+    <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+        <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1, pageSize = ViewBag.PageSize })">قبلی</a>
+    </li>
+
+    <!-- نمایش صفحات -->
+    @if (Model.PageCount > 5)
+    {
+        <!-- اگر صفحه فعلی بزرگتر از 2 باشد، نمایش صفحه اول -->
+        @if (Model.PageNumber > 2)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { page = 1, pageSize = ViewBag.PageSize })">1</a>
+            </li>
+        }
+
+        <!-- نمایش سه نقطه قبل از صفحات میانه -->
+        @if (Model.PageNumber > 3)
+        {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+
+        <!-- نمایش صفحات اطراف صفحه فعلی -->
+        @for (int i = Model.PageNumber - 1; i <= Model.PageNumber + 1; i++)
+        {
+            if (i > 0 && i <= Model.PageCount)
+            {
+                <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+                </li>
+            }
+        }
+
+        <!-- نمایش سه نقطه بعد از صفحات میانه -->
+        @if (Model.PageNumber < Model.PageCount - 2)
+        {
+            <li class="page-item disabled">
+                <span class="page-link">...</span>
+            </li>
+        }
+
+        <!-- نمایش صفحه آخر -->
+        @if (Model.PageNumber < Model.PageCount - 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount, pageSize = ViewBag.PageSize })">@Model.PageCount</a>
+            </li>
+        }
+    }
+    else
+    {
+        <!-- اگر تعداد صفحات کمتر از 5 باشد، تمام صفحات را نمایش بده -->
+        @for (int i = 1; i <= Model.PageCount; i++)
+        {
+            <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i, pageSize = ViewBag.PageSize })">@i</a>
+            </li>
+        }
+    }
+
+    <!-- دکمه صفحات بعدی -->
+    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+        <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1, pageSize = ViewBag.PageSize })">بعدی</a>
+    </li>
+
+    <!-- دکمه آخرین صفحه -->
+    <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+        <a class="page-link" href="@Url.Action("Index", new { page = Model.PageCount, pageSize = ViewBag.PageSize })">آخرین</a>
+    </li>
+</ul>
+
+
+
+
+@section Scripts
+{
+    <script>
+        $("#SelectCategory").on("change", function() {
+            const categoryId = $(this).val();
+            const pageSize = $("#PageSize").val();
+            window.location = "/admin/products?categoryId=" + categoryId + "&pageSize=" + pageSize;
+        });
+    </script>
+}

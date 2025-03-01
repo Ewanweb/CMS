@@ -1,0 +1,56 @@
+﻿@model IEnumerable<CMS.Domain.Admin.Products.Gallery.ProductGallery>
+@using PersianDate.Standard
+
+@{
+
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">افزودن فیلد جدید</a>
+</p>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form asp-action="UploadImages" asp-controller="ProductGallery" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="productId" value="@ViewBag.ProductId" />
+
+    <div class="mb-3">
+        <label for="files" class="form-label">انتخاب تصاویر</label>
+        <input type="file" name="files" id="files" class="form-control" multiple required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">آپلود تصاویر</button>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedTime)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                <img src="@Url.Content("~/Media/Products/Gallery/" + item.Image)" width="200" height="200" />
+            </td>
+            <td>
+                    @item.CreatedTime.ToFa("hh:mm YYYY/MM/dd")
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-id="@item.Id">حذف</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

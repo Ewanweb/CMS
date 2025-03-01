@@ -1,0 +1,126 @@
+﻿@model IEnumerable<Page>
+
+@{
+    ViewData["Title"] = "Pages";
+}
+
+<h1>Pages</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table sorting" id="pages">
+    <thead>
+        <tr class="home">
+            <th>
+                Title
+            </th>
+            <th>
+                Slug
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr data-id="@item.Id">
+            <td>@Html.DisplayFor(modelItem => item.Title)</td>
+            <td>@Html.DisplayFor(modelItem => item.Slug)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                @if (item.Id != 1)
+                {
+                    <a class="confirm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+
+</table>
+
+
+@section Scripts{
+    <script src="~/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/jqueryui/jquery-ui.js"></script>
+
+
+    <script>
+        $(function () {
+            $("table#pages tbody").sortable({
+                items: "tr:not([data-id='1'])", // آیتم‌هایی که `id=1` نیستند قابل جابه‌جایی هستند
+                placeholder: "ui-state-highlight",
+                cancel: "tr[data-id='1']", // آیتمی که `id=1` دارد، قابلیت درگ ندارد
+                update: function () {
+                    let sortedIds = $("table#pages tbody tr").map(function () {
+                        return $(this).data("id");
+                    }).get();
+
+                    $.post("/Admin/Pages/RecorderPages", { sortedIds: sortedIds }, function () {
+                        Swal.fire({
+                            title: "موفقیت‌آمیز!",
+                            text: "ترتیب صفحات با موفقیت ذخیره شد.",
+                            icon: "success",
+                            confirmButtonText: "باشه",
+                            timer: 2500, // بسته شدن خودکار بعد از ۲.۵ ثانیه
+                            showClass: {
+                                popup: "animate__animated animate__fadeInDown"
+                            },
+                            hideClass: {
+                                popup: "animate__animated animate__fadeOutUp"
+                            }
+                        });
+                    }).fail(function () {
+                        Swal.fire({
+                            title: "خطا!",
+                            text: "مشکلی در ذخیره ترتیب صفحات به وجود آمد.",
+                            icon: "error",
+                            confirmButtonText: "متوجه شدم",
+                            timer: 2500
+                        });
+                    });
+                }
+            });
+        });
+
+
+    </script>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.body.addEventListener("click", function (event) {
+                if (event.target.classList.contains("confirm")) {
+                    event.preventDefault(); // جلوگیری از اجرای لینک حذف
+
+                    const deleteUrl = event.target.getAttribute("href"); // گرفتن لینک حذف
+
+                    const swalWithBootstrapButtons = Swal.mixin({
+                        customClass: {
+                            confirmButton: "btn btn-success",
+                            cancelButton: "btn btn-danger"
+                        },
+                        buttonsStyling: false
+                    });
+
+                    swalWithBootstrapButtons.fire({
+                        title: "آیا مطمئن هستید؟",
+                        text: "این عملیات قابل بازگشت نیست!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "بله، حذف شود!",
+                        cancelButtonText: "خیر، لغو کن!",
+                        reverseButtons: true
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = deleteUrl; // هدایت به حذف
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
