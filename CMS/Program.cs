@@ -49,7 +49,6 @@ app.MapControllerRoute(
     pattern: "{controller=Products}/{action=Index}/{slug?}")
     .WithStaticAssets();
 
-
 app.MapControllerRoute(
     name: "Pages",
     pattern: "{slug?}/{controller=Home}/{action=Index}/{id?}")

@@ -8,7 +8,7 @@
     @foreach (var item in Model)
     {
         <li class="list-group-item">
-            <a class="nav-link text-dark" asp-controller="Product" asp-action="Index" asp-route-slug="@item.Slug">
+            <a class="nav-link text-dark { }" asp-controller="Product" asp-action="Index" asp-route-slug="@item.Slug">
                 @item.Name
             </a>
         </li>

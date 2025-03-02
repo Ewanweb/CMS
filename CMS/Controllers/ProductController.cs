@@ -69,7 +69,7 @@ namespace CMS.Controllers
             IEnumerable<ProductGallery>? pGallery = await _repository.GetProductGalleyAsync(product.Id);
 
             List<string> galleryPath = pGallery
-                .Select(g => $"/media/products/gallery/{g.Image}") // فقط یک بار مسیر را اضافه کن
+                .Select(g => Url.Content($"~/Media/Products/Gallery/{g.Image}")) // فقط یک بار مسیر را اضافه کن
                 .ToList() ?? new List<string>();
 
             ViewBag.GalleryPath = galleryPath;

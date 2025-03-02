@@ -67,14 +67,10 @@ namespace CMS.Infrastructure.Repositories
 
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<Product?> GetProductByIdAsync(int id)
         {
             var product = await _context.Products.Include(p => p.Category)
                                           .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (product is null)
-                throw new Exception("محصول یافت نشد");
-
             return product;
         }
 

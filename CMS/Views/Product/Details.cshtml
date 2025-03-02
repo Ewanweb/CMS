@@ -23,9 +23,11 @@
             <h4 class="text-primary">قیمت: @Model.Price.ToString("N1") تومان</h4>
 
             <div class="mt-3">
-                <button class="btn btn-success btn-lg">
-                    <i class="bi bi-cart-plus"></i> افزودن به سبد خرید
-                </button>
+                <form asp-controller="Cart" asp-action="Add" method="post">
+                    <input type="hidden" name="productId" value="@Model.Id" />
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn btn-success btn-lg">افزودن به سبد خرید</button>
+                </form>
             </div>
         </div>
     </div>
@@ -39,7 +41,7 @@
                 @foreach (var imgPath in ViewBag.GalleryPath)
                 {
                     <div class="p-2">
-                        <img src="~/media/products/gallery/@imgPath" class="img-thumbnail" style="width: 120px; height: 120px; object-fit: cover;" onerror="this.onerror=null; this.src='/media/default.png';" />
+                        <img src="@imgPath" class="img-thumbnail" style="width: 120px; height: 120px; object-fit: cover;" />
                     </div>
                 }
             </div>

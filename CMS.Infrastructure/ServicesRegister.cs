@@ -12,6 +12,7 @@ using CMS.Application.Services;
 using CMS.Domain.Admin.Pages;
 using CMS.Domain.Admin.Products;
 using CMS.Application.MapingProfiles;
+using CMS.Application.SmallCartView.Service;
 
 namespace CMS.Infrastructure
 {
@@ -27,6 +28,8 @@ namespace CMS.Infrastructure
 
             //Auto Maper Configurations
             services.AddAutoMapper(typeof(MappingProfile));
+
+            services.AddHttpContextAccessor();
 
             //Register Repositories
             services.AddScoped<IProductRepository, ProductRepository>();
@@ -48,6 +51,7 @@ namespace CMS.Infrastructure
             //Register Services
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IProductGalleryService, ProductGalleryService>();
+            services.AddScoped<ICartService, CartService>();
             services.AddScoped<PageService>();
             return services;
         }

@@ -12,7 +12,7 @@ namespace CMS.Domain.Admin.Repository
     public interface IProductRepository : IRepository<Product>
     {
         Task<IEnumerable<Product>> GetAllProductsAsync(int categoryId);
-        Task<Product> GetProductByIdAsync(int id);
+        Task<Product?> GetProductByIdAsync(int id);
         Task<IEnumerable<Product>> GetProductsByCategory(string slug);
         Task AddProductAsync(Product product);
         Task UpdateProductAsync(Product product);

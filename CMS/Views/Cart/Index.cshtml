@@ -1,0 +1,77 @@
+﻿@model List<SmallCartViewModel>
+
+<h2>سبد خرید</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>تصویر</th>
+            <th>نام محصول</th>
+            <th>قیمت</th>
+            <th>تعداد</th>
+            <th>مجموع</th>
+            <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img src="~/Media/Products/@item.Image" alt="@item.Name" width="80" height="80" style="border-radius: 10px;" />
+                </td>
+                <td>@item.Name</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>
+                    <form asp-controller="Cart" asp-action="UpdateQuantity" method="post">
+                        <input type="hidden" name="productId" value="@item.ProductId" />
+                        <input type="number" name="quantity" value="@item.Quantity" min="1" />
+                        <button type="submit">بروزرسانی</button>
+                    </form>
+                </td>
+                <td>@item.TotalPrice.ToString("C")</td>
+                <td>
+                    <form id="deleteForm-@item.ProductId" asp-route-id="@item.ProductId" asp-controller="Cart" asp-action="RemoveFromCart" method="post">
+                        <input type="hidden" name="productId" value="@item.ProductId" />
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete(@item.ProductId)">حذف</button>
+                    </form>
+                </td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+    <form asp-controller="Cart" asp-action="ClearCart" method="post">
+        <button type="submit" class="btn btn-warning">خالی کردن سبد خرید</button>
+    </form>
+    <h3>جمع کل: @Model.Sum(p => p.TotalPrice).ToString("N")</h3>
+}
+else
+{
+    <p>سبد خرید شما خالی است.</p>
+}
+@section Scripts
+{
+    <script>
+                function confirmDelete(productId) {
+            console.log("Product ID:", productId); // مقدار productId را در کنسول چاپ کن
+            Swal.fire({
+                title: "آیا مطمئن هستید؟",
+                text: "این عملیات قابل بازگشت نیست!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "بله، حذف شود!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log("فرم حذف ارسال شد:", `deleteForm-${productId}`);
+                    document.getElementById(`deleteForm-${productId}`).submit();
+                }
+            });
+        }
+
+    </script>
+}
