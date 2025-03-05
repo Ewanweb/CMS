@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS.Infrastructure", "CMS.I
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMS", "CMS\CMS.csproj", "{EAB46C4B-393B-4A44-982A-745CEFC63BBE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{017CE975-1239-47D9-8666-C30B8587BFEE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,10 +35,6 @@ Global
 		{EAB46C4B-393B-4A44-982A-745CEFC63BBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAB46C4B-393B-4A44-982A-745CEFC63BBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAB46C4B-393B-4A44-982A-745CEFC63BBE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{017CE975-1239-47D9-8666-C30B8587BFEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{017CE975-1239-47D9-8666-C30B8587BFEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{017CE975-1239-47D9-8666-C30B8587BFEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{017CE975-1239-47D9-8666-C30B8587BFEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

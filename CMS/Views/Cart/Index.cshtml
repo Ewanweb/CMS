@@ -46,6 +46,11 @@
     <form asp-controller="Cart" asp-action="ClearCart" method="post">
         <button type="submit" class="btn btn-warning">خالی کردن سبد خرید</button>
     </form>
+
+    <form asp-controller="CheckOut" asp-action="ProcessOrder" method="post">
+        <button type="submit" class="btn btn-warning">مرحله بعدی</button>
+    </form>
+
     <h3>جمع کل: @Model.Sum(p => p.TotalPrice).ToString("N")</h3>
 }
 else

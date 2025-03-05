@@ -1,23 +1,32 @@
 ﻿using CMS.Domain.Admin.Categories;
+using CMS.Domain.Admin.Orders;
 using CMS.Domain.Admin.Pages;
 using CMS.Domain.Admin.Products;
 using CMS.Domain.Admin.Products.Gallery;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CMS.Infrastructure
 {
-    public class DataContext : DbContext
+    public class DataContext(DbContextOptions<DataContext> options) : IdentityDbContext(options)
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options)
-        {
-        }
+
         public DbSet<Page> Pages { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductGallery> ProductsGallery { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.OrderDetails)
+                .WithOne(od => od.Order)
+                .HasForeignKey(od => od.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             modelBuilder.Entity<Category>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.Category)

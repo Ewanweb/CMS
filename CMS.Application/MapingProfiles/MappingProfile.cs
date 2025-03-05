@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace CMS.Application.MapingProfiles
 {
@@ -22,6 +23,7 @@ namespace CMS.Application.MapingProfiles
 
             // Page Mapping
             CreateMap<Page, PageDto>().ReverseMap();
+
         }
     }
 }

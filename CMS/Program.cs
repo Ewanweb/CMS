@@ -1,4 +1,5 @@
 using CMS.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,15 +8,6 @@ builder.Services.AddControllersWithViews();
 
 // Register Services
 builder.Services.AddInfrastructureService(builder.Configuration);
-
-// Add Session
-builder.Services.AddDistributedMemoryCache();
-
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.IsEssential = true;
-});
 
 var app = builder.Build();
 
@@ -28,15 +20,19 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseAuthentication();
 
 app.MapStaticAssets();
 
 app.UseSession();
 
 app.UseStaticFiles();
+
 
 app.MapControllerRoute(
     name: "areas",

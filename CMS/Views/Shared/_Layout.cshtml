@@ -26,6 +26,21 @@
                         <li class="nav-item">
                             <a  asp-controller="Cart" asp-action="Index" class="nav-link text-dark">Cart</a>
                         </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post">
+                                    <button type="submit" class="btn btn-danger">Logout</button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a  asp-controller="Account" asp-action="Register" class="nav-link text-dark">Register</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
